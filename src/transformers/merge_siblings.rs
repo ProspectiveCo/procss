@@ -9,67 +9,31 @@
 // │                                                                           │
 // └───────────────────────────────────────────────────────────────────────────┘
 
-#![feature(assert_matches)]
+use std::collections::HashSet;
 
-#[cfg(test)]
-use std::assert_matches::assert_matches;
+use crate::ast::Ruleset::{self};
+use crate::ast::*;
 
-use procss::transformers::{apply_mixin, remove_mixin};
-use procss::{parse, RenderCss};
+pub fn merge_siblings(css: &mut Css) {
+    let mut res = vec![];
+    let reduced = css.iter().cloned().reduce(|x, y| match (x, y) {
+        (Ruleset::QualRule(x), Ruleset::QualRule(y)) if x == y => Ruleset::QualRule(x),
+        (Ruleset::SelectorRuleset(x), Ruleset::SelectorRuleset(y)) if x.0 == y.0 => {
+            let mut tail = x.1.clone();
+            tail.extend(y.1);
+            Ruleset::SelectorRuleset(SelectorRuleset(x.0.clone(), tail))
+        }
+        x => {
+            res.push(x.0);
+            x.1
+        }
+    });
 
-#[test]
-fn test_advanced_mixin() {
-    assert_matches!(
-        parse(
-            "
-            @mixin test {
-                color: green;
-                opacity: 0;
-            }
+    if let Some(reduced) = reduced {
+        res.push(reduced.clone());
+    }
 
-            div.open {
-                color: red;
-                @include test;
-            }
-        "
-        )
-        .map(|mut x| {
-            apply_mixin(&mut x);
-            let mut flatten = x.flatten_tree();
-            remove_mixin(&mut flatten);
-            flatten.as_css_string()
-        })
-        .as_deref(),
-        Ok("div.open{color:red;}div.open{color:green;opacity:0;}")
-    )
-}
-
-#[ignore]
-#[test]
-fn test_transitive_mixin() {
-    assert_matches!(
-        parse(
-            "
-            @mixin test {
-                color: green;
-            }
-
-            @mixin test2 {
-                @include test;
-                opacity: 0;
-            }
-
-            div.open {
-                color: red;
-                @include test2;
-            }
-        "
-        )
-        .map(|mut x| {
-            apply_mixin(&mut x);
-            x.flatten_tree().as_css_string()
-        })
-        .as_deref(),
-        Ok("div.open{color:red;}div.open{color:green;opacity:0;}")
-    )
+    let mut seen: HashSet<&Ruleset<'_, Rule<'_>>> = HashSet::default();
+    let res = res.iter().filter(|x| seen.insert(*x)).cloned().collect();
+    *css = crate::ast::Css(res)
 }

@@ -29,15 +29,19 @@
 mod apply_import;
 mod apply_mixin;
 mod apply_var;
-mod dedupe;
+mod deduplicate;
 mod filter_refs;
 mod flat_self;
 mod inline_url;
+mod merge_siblings;
+mod remove_mixin;
 
 pub use self::apply_import::apply_import;
 pub use self::apply_mixin::apply_mixin;
 pub use self::apply_var::apply_var;
-pub use self::dedupe::dedupe;
+pub use self::deduplicate::deduplicate;
 pub use self::filter_refs::filter_refs;
 pub(crate) use self::flat_self::flat_self;
 pub use self::inline_url::inline_url;
+pub use self::merge_siblings::merge_siblings;
+pub use self::remove_mixin::remove_mixin;

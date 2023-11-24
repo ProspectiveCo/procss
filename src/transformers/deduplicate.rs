@@ -9,67 +9,19 @@
 // │                                                                           │
 // └───────────────────────────────────────────────────────────────────────────┘
 
-#![feature(assert_matches)]
+use std::collections::HashSet;
 
-#[cfg(test)]
-use std::assert_matches::assert_matches;
+use crate::ast::Ruleset::{self};
+use crate::ast::*;
 
-use procss::transformers::{apply_mixin, remove_mixin};
-use procss::{parse, RenderCss};
-
-#[test]
-fn test_advanced_mixin() {
-    assert_matches!(
-        parse(
-            "
-            @mixin test {
-                color: green;
-                opacity: 0;
-            }
-
-            div.open {
-                color: red;
-                @include test;
-            }
-        "
-        )
-        .map(|mut x| {
-            apply_mixin(&mut x);
-            let mut flatten = x.flatten_tree();
-            remove_mixin(&mut flatten);
-            flatten.as_css_string()
-        })
-        .as_deref(),
-        Ok("div.open{color:red;}div.open{color:green;opacity:0;}")
-    )
-}
-
-#[ignore]
-#[test]
-fn test_transitive_mixin() {
-    assert_matches!(
-        parse(
-            "
-            @mixin test {
-                color: green;
-            }
-
-            @mixin test2 {
-                @include test;
-                opacity: 0;
-            }
-
-            div.open {
-                color: red;
-                @include test2;
-            }
-        "
-        )
-        .map(|mut x| {
-            apply_mixin(&mut x);
-            x.flatten_tree().as_css_string()
-        })
-        .as_deref(),
-        Ok("div.open{color:red;}div.open{color:green;opacity:0;}")
-    )
+pub fn deduplicate(css: &mut Css) {
+    let mut seen: HashSet<&Ruleset<'_, Rule<'_>>> = HashSet::default();
+    let res = css
+        .iter()
+        .rev()
+        .filter(|x| seen.insert(*x))
+        .rev()
+        .cloned()
+        .collect();
+    *css = crate::ast::Css(res);
 }

@@ -14,14 +14,12 @@ use crate::ast::*;
 
 pub fn filter_refs(tree: &mut Tree) {
     *tree = Tree(
-        tree.iter()
-            .cloned()
-            .filter(|y| match y {
+        tree.iter().filter(|&y| match y {
                 Ruleset::SelectorRuleset(_) => false,
                 Ruleset::QualRule(_) => true,
                 Ruleset::QualRuleset(_) => true,
                 Ruleset::QualNestedRuleset(_) => true,
-            })
+            }).cloned()
             .collect(),
     )
 }

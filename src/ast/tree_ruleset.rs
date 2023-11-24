@@ -28,7 +28,7 @@ use crate::transform::TransformCss;
 /// A tree node which expresses a recursive `T` over `Ruleset<T>`.  Using this
 /// struct in place of `Rule` allows nested CSS selectors that can be later
 /// flattened.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub enum TreeRule<'a> {
     Rule(Rule<'a>),
     Ruleset(TreeRuleset<'a>),

@@ -124,7 +124,8 @@ fn test_advanced_mixin() {
             .map(|mut tree| {
                 transformers::apply_mixin(&mut tree);
                 let mut flat = tree.flatten_tree();
-                transformers::dedupe(&mut flat);
+                transformers::merge_siblings(&mut flat);
+                transformers::remove_mixin(&mut flat);
                 flat.as_css_string()
             })
             .as_deref(),
