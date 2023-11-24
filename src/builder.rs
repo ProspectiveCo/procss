@@ -95,6 +95,7 @@ impl<'a> BuildCss<'a> {
             transformers::inline_url(&srcdir.to_string_lossy())(css);
             transformers::merge_siblings(css);
             transformers::remove_mixin(css);
+            transformers::remove_var(css);
             transformers::deduplicate(css);
         }
 

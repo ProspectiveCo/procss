@@ -35,6 +35,7 @@ mod flat_self;
 mod inline_url;
 mod merge_siblings;
 mod remove_mixin;
+mod remove_var;
 
 pub use self::apply_import::apply_import;
 pub use self::apply_mixin::apply_mixin;
@@ -45,3 +46,4 @@ pub(crate) use self::flat_self::flat_self;
 pub use self::inline_url::inline_url;
 pub use self::merge_siblings::merge_siblings;
 pub use self::remove_mixin::remove_mixin;
+pub use self::remove_var::remove_var;

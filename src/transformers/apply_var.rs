@@ -17,16 +17,10 @@ use crate::ast::*;
 pub fn apply_var<'a>(tree: &mut Tree<'a>) {
     let mut mixins: HashMap<&'a str, &'a str> = HashMap::new();
     tree.transform(|ruleset| {
-        let mut is_mixin = false;
         if let Ruleset::QualRule(QualRule(name, Some(val))) = ruleset {
             if let Some(val) = val.strip_prefix(':') {
                 mixins.insert(name, val);
-                is_mixin = true;
             }
-        }
-
-        if is_mixin {
-            *ruleset = Ruleset::QualRuleset(QualRuleset(QualRule("", None), vec![]))
         }
     });
 

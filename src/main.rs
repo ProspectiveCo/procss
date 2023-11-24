@@ -36,4 +36,6 @@ fn main() {
 }
 
 #[cfg(target_arch = "wasm32")]
-fn main() {}
+fn main() {
+    std::panic::set_hook(Box::new(console_error_panic_hook::hook));
+}
