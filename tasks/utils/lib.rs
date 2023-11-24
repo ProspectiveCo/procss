@@ -9,8 +9,6 @@
 // │                                                                           │
 // └───────────────────────────────────────────────────────────────────────────┘
 
-#![feature(once_cell)]
-
 use std::process::{exit, Command};
 
 use once_cell::sync::Lazy;
@@ -24,7 +22,7 @@ impl SimpleCommand for Command {
     fn execute(&mut self) {
         let code = self.status().expect("Failed to execute").code();
         match code {
-            Some(x) if x == 0 => (),
+            Some(0) => (),
             Some(x) => exit(x),
             None => exit(1),
         }
