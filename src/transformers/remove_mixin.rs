@@ -12,24 +12,18 @@
 use crate::ast::Ruleset::{self};
 use crate::ast::*;
 
-pub fn dedupe(css: &mut Css) {
-    let mut res = vec![];
-    let reduced = css.iter().cloned().reduce(|x, y| match (x, y) {
-        (Ruleset::QualRule(x), Ruleset::QualRule(y)) if x == y => Ruleset::QualRule(x),
-        (Ruleset::SelectorRuleset(x), Ruleset::SelectorRuleset(y)) if x.0 == y.0 => {
-            let mut tail = x.1.clone();
-            tail.extend(y.1);
-            Ruleset::SelectorRuleset(SelectorRuleset(x.0.clone(), tail))
-        }
-        x => {
-            res.push(x.0);
-            x.1
-        }
-    });
+pub fn remove_mixin(css: &mut Css) {
+    let reduced = css
+        .iter()
+        .filter(|&x| {
+            !matches!(
+                x,
+                Ruleset::QualRule(QualRule("mixin", _))
+                    | Ruleset::QualNestedRuleset(QualNestedRuleset(QualRule("mixin", _), _))
+                    | Ruleset::QualRuleset(QualRuleset(QualRule("mixin", _), _))
+            )
+        })
+        .cloned();
 
-    if let Some(reduced) = reduced {
-        res.push(reduced.clone());
-    }
-
-    *css = crate::ast::Css(res)
+    *css = crate::ast::Css(reduced.collect())
 }

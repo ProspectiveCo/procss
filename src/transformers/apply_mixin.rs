@@ -20,7 +20,7 @@ use crate::ast::*;
 /// # Example
 ///
 /// ```
-/// # use procss::{parse, transformers::apply_mixin, RenderCss};
+/// # use procss::{parse, transformers::apply_mixin, transformers::remove_mixin, RenderCss};
 /// let css = "
 /// @mixin test {
 ///     opacity: 0;
@@ -32,20 +32,20 @@ use crate::ast::*;
 /// ";
 /// let mut tree = parse(css).unwrap();
 /// apply_mixin(&mut tree);
-/// let css = tree.flatten_tree().as_css_string();
+/// let mut flat = tree.flatten_tree();
+/// remove_mixin(&mut flat);
+/// let css = flat.as_css_string();
 /// assert_eq!(css, "div.open{color:red;}div.open{opacity:0;}");
 /// ```
 pub fn apply_mixin<'a>(tree: &mut Tree<'a>) {
     let mut mixins: HashMap<&'a str, Vec<TreeRule<'a>>> = HashMap::new();
     tree.transform(|ruleset| {
-        if let Ruleset::QualRuleset(crate::ast::QualRuleset(QualRule(name, Some(val)), props)) = ruleset {
-            if *name == "mixin"  {
+        if let Ruleset::QualRuleset(crate::ast::QualRuleset(QualRule(name, Some(val)), props)) =
+            ruleset
+        {
+            if *name == "mixin" {
                 mixins.insert(val.trim(), props.clone());
             }
-        }
-
-        if matches!(ruleset,  Ruleset::QualRuleset(QualRuleset(QualRule(name, _), _)) if *name == "mixin") {
-            *ruleset = Ruleset::SelectorRuleset(SelectorRuleset(Selector::default(), vec![]))
         }
     });
 

@@ -14,7 +14,7 @@
 #[cfg(test)]
 use std::assert_matches::assert_matches;
 
-use procss::transformers::apply_mixin;
+use procss::transformers::{apply_mixin, remove_mixin};
 use procss::{parse, RenderCss};
 
 #[test]
@@ -35,7 +35,9 @@ fn test_advanced_mixin() {
         )
         .map(|mut x| {
             apply_mixin(&mut x);
-            x.flatten_tree().as_css_string()
+            let mut flatten = x.flatten_tree();
+            remove_mixin(&mut flatten);
+            flatten.as_css_string()
         })
         .as_deref(),
         Ok("div.open{color:red;}div.open{color:green;opacity:0;}")

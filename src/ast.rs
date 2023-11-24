@@ -41,7 +41,7 @@ use crate::transformers;
 /// A non-nested "flat" CSS representation, suitable for browser output. The
 /// [`Css`] AST is typically generated via the
 /// [`crate::ast::Tree::flatten_tree`] method.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct Css<'a>(pub Vec<FlatRuleset<'a>>);
 
 impl<'a> Css<'a> {
@@ -67,7 +67,7 @@ impl<'a> Css<'a> {
     }
 
     /// Iterate over the immediate children of this Tree (non-recursive).
-    pub fn iter(&self) -> impl Iterator<Item = &'_ FlatRuleset<'a>> {
+    pub fn iter(&self) -> impl DoubleEndedIterator<Item = &'_ FlatRuleset<'a>> {
         self.0.iter()
     }
 }
@@ -97,7 +97,7 @@ impl<'a> RenderCss for Css<'a> {
 /// [`RenderCss`] if this is needed, though this output can't be read by
 /// browsers and is not identical to the input since whitespace has been
 /// discarded.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct Tree<'a>(pub Vec<TreeRuleset<'a>>);
 
 impl<'a> Tree<'a> {

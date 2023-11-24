@@ -32,7 +32,7 @@ use crate::transform::TransformCss;
 ///     color: red;
 /// }
 /// ```
-#[derive(Debug, Clone)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct SelectorRuleset<'a, T>(pub Selector<'a>, pub Vec<T>);
 
 impl<'a, T: RenderCss> RenderCss for SelectorRuleset<'a, T> {
@@ -95,7 +95,7 @@ impl<'a> RenderCss for QualRule<'a> {
 ///     font-family: "My Font";
 /// };
 /// ```
-#[derive(Debug, Clone)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct QualRuleset<'a, T>(pub QualRule<'a>, pub Vec<T>);
 
 impl<'a, T: RenderCss> RenderCss for QualRuleset<'a, T> {
@@ -139,7 +139,7 @@ impl<'a, T: TransformCss<U>, U> TransformCss<U> for QualRuleset<'a, T> {
 ///     }
 /// }
 /// ```
-#[derive(Debug, Clone)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct QualNestedRuleset<'a, T>(pub QualRule<'a>, pub Vec<Ruleset<'a, T>>);
 
 impl<'a, T: RenderCss> RenderCss for QualNestedRuleset<'a, T> {
@@ -194,7 +194,7 @@ where
 /// }
 /// ```
 #[allow(clippy::enum_variant_names)]
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub enum Ruleset<'a, T> {
     SelectorRuleset(SelectorRuleset<'a, T>),
     QualRule(QualRule<'a>),

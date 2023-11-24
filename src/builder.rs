@@ -81,8 +81,9 @@ impl<'a> BuildCss<'a> {
             self.trees.insert(path, tree);
         }
 
-        let dep_trees = self.trees.clone();
-        for (path, tree) in self.trees.iter_mut() {
+        for path in self.paths.iter() {
+            let dep_trees = self.trees.clone();
+            let tree = self.trees.get_mut(path.as_path()).unwrap();
             transformers::apply_import(&dep_trees)(tree);
             transformers::apply_mixin(tree);
             transformers::apply_var(tree);
@@ -92,7 +93,9 @@ impl<'a> BuildCss<'a> {
         for (path, css) in self.css.iter_mut() {
             let srcdir = utils::join_paths(&self.rootdir, path);
             transformers::inline_url(&srcdir.to_string_lossy())(css);
-            transformers::dedupe(css);
+            transformers::merge_siblings(css);
+            transformers::remove_mixin(css);
+            transformers::deduplicate(css);
         }
 
         Ok(CompiledCss(self))

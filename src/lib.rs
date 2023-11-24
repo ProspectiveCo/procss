@@ -58,8 +58,10 @@
 //!
 //! let mut ast = procss::parse(test).unwrap();
 //! transformers::apply_mixin(&mut ast);
-//! let flat = ast.flatten_tree().as_css_string();
-//! assert_eq!(flat, "div{color:red;}");
+//! let mut flat = ast.flatten_tree();
+//! transformers::remove_mixin(&mut flat);
+//! let css = flat.as_css_string();
+//! assert_eq!(css, "div{color:red;}");
 //! ```
 //!
 //! For coordinating large builds on a tree of CSS files, the [`BuildCss`]

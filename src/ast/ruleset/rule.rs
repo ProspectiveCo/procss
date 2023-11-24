@@ -24,7 +24,7 @@ use crate::render::RenderCss;
 use crate::transform::TransformCss;
 
 /// A CSS rule, of the form `xxx: yyy` (delimited by `;` in a ruleset).
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct Rule<'a> {
     pub property: Cow<'a, str>,
     pub value: Cow<'a, str>,
