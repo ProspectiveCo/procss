@@ -14,7 +14,7 @@
 #[cfg(test)]
 use std::assert_matches::assert_matches;
 
-use procss::transformers::apply_var;
+use procss::transformers::{apply_var, remove_var};
 use procss::{parse, RenderCss};
 
 #[test]
@@ -31,7 +31,9 @@ fn test_var() {
         )
         .map(|mut x| {
             apply_var(&mut x);
-            x.flatten_tree().as_css_string()
+            let mut flat = x.flatten_tree();
+            remove_var(&mut flat);
+            flat.as_css_string()
         })
         .as_deref(),
         Ok("div.open{color:#FF1111;}")
@@ -52,7 +54,9 @@ fn test_var_overlapping_name() {
         )
         .map(|mut x| {
             apply_var(&mut x);
-            x.flatten_tree().as_css_string()
+            let mut flat = x.flatten_tree();
+            remove_var(&mut flat);
+            flat.as_css_string()
         })
         .as_deref(),
         Ok("div.open{color:#0000FF;}")

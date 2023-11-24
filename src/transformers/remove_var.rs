@@ -9,65 +9,19 @@
 // │                                                                           │
 // └───────────────────────────────────────────────────────────────────────────┘
 
-#![feature(assert_matches)]
+use crate::ast::Ruleset::{self};
+use crate::ast::*;
 
-#[cfg(test)]
-use std::assert_matches::assert_matches;
-use std::collections::HashMap;
-use std::path::Path;
-
-use procss::transformers::{apply_import, apply_var, remove_var};
-use procss::{parse, RenderCss};
-
-#[test]
-fn test_apply_import() {
-    let mut trees = HashMap::default();
-    trees.insert(
-        Path::new("test"),
-        parse("div.closed{color: green}").unwrap(),
-    );
-    assert_matches!(
-        parse(
-            "
-            @import \"test\";
-            div.open {
-                color: red;
+pub fn remove_var(css: &mut Css) {
+    let reduced = css
+        .iter()
+        .filter(|&ruleset| match ruleset {
+            Ruleset::QualRule(QualRule(name, Some(val))) if val.strip_prefix(':').is_some() => {
+                false
             }
-        "
-        )
-        .map(|mut x| {
-            apply_import(&trees)(&mut x);
-            x.flatten_tree().as_css_string()
+            _ => true,
         })
-        .as_deref(),
-        Ok("div.closed{color:green;}div.open{color:red;}")
-    )
-}
+        .cloned();
 
-#[test]
-fn test_import_ref() {
-    let mut trees = HashMap::default();
-    trees.insert(
-        Path::new("test"),
-        parse("div.closed{color: ref}@green: #00FF00;").unwrap(),
-    );
-    assert_matches!(
-        parse(
-            "
-            @import url(\"ref://test\");
-            div.open {
-                color: @green;
-            }
-        "
-        )
-        .map(|mut x| {
-            apply_import(&trees)(&mut x);
-            apply_var(&mut x);
-            let mut flat = x.flatten_tree();
-            remove_var(&mut flat);
-            flat.as_css_string()
-        })
-        .as_deref(),
-        Ok("div.open{color:#00FF00;}")
-    )
+    *css = crate::ast::Css(reduced.collect())
 }
