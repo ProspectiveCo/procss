@@ -1,6 +1,6 @@
 {
   "name": "@prospective.co/procss",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "A simple CSS parsing and transformation framework.",
   "repository": {
     "type": "git",
