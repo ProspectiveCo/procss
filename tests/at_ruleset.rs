@@ -112,7 +112,7 @@ fn test_import() {
         )
         .map(|x| x.flatten_tree().as_css_string())
         .as_deref(),
-        Ok("@import\"test\";div{color:green;}")
+        Ok("@import \"test\";div{color:green;}")
     )
 }
 
