@@ -35,3 +35,13 @@ fn test_minify_percent_followed_by_plus() {
         Ok("div{width:calc(100% + 28px);}")
     )
 }
+
+#[test]
+fn test_minify_svg() {
+    assert_matches!(
+        parse(r#"div { background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' preserveAspectRatio='none' viewBox='0 0 100 100'><path d='M100 0 L0 100 ' stroke='black' stroke-width='1'/><path d='M0 0 L100 100 ' stroke='black' stroke-width='1'/></svg>") #8b868045; }"#)
+            .map(|x| x.as_css_string())
+            .as_deref(),
+        Ok("div{background:url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' preserveAspectRatio='none' viewBox='0 0 100 100'><path d='M100 0 L0 100 ' stroke='black' stroke-width='1'/><path d='M0 0 L100 100 ' stroke='black' stroke-width='1'/></svg>\")#8b868045;}")
+    )
+}

@@ -31,14 +31,30 @@ impl NeedsWhitespaceStringExt for str {
     fn needs_pre_ws(&self) -> bool {
         self.chars()
             .next()
-            .map(|x| x.is_ascii_alphanumeric() || x == '-' || x == '_' || x == '%' || x == '+')
+            .map(|x| {
+                x.is_ascii_alphanumeric()
+                    || x == '-'
+                    || x == '_'
+                    || x == '%'
+                    || x == '+'
+                    || x == '"'
+                    || x == '\''
+            })
             .unwrap_or_default()
     }
 
     fn needs_post_ws(&self) -> bool {
         self.chars()
             .last()
-            .map(|x| x.is_ascii_alphanumeric() || x == '-' || x == '_' || x == '%' || x == '+')
+            .map(|x| {
+                x.is_ascii_alphanumeric()
+                    || x == '"'
+                    || x == '\''
+                    || x == '-'
+                    || x == '_'
+                    || x == '%'
+                    || x == '+'
+            })
             .unwrap_or_default()
     }
 }
@@ -56,18 +72,6 @@ pub fn trim_whitespace(s: &str, f: &mut std::fmt::Formatter<'_>) {
         write!(f, "{}", w).unwrap();
     });
 }
-
-// pub fn trim_whitespace(s: &str, f: &mut std::fmt::Formatter<'_>) {
-//     let mut flag = false;
-//     s.split_whitespace().for_each(|w| {
-//         if flag {
-//             write!(f, " ").unwrap();
-//         }
-
-//         flag = flag || !w.is_empty();
-//         write!(f, "{}", w).unwrap();
-//     });
-// }
 
 fn parse_comment<'a, E>(input: &'a str) -> IResult<&'a str, (), E>
 where
