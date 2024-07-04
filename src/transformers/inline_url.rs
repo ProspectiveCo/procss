@@ -52,9 +52,12 @@ fn into_data_uri<'a>(path: &Path) -> Option<Cow<'a, str>> {
     let contents = read_file_sync(path)?;
     let encoded = base64::encode(contents);
     let fff = path.extension().unwrap_or_default().to_string_lossy();
+    let ggg = path.to_string_lossy();
     let fmt = match fff.as_ref() {
         "png" => "png",
-        _ => "svg+xml",
+        "gif" => "gif",
+        "svg" => "svg+xml",
+        x => ggg.as_ref(),
     };
 
     Some(format!("url(\"data:image/{};base64,{}\")", fmt, encoded).into())
