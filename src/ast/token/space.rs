@@ -39,6 +39,7 @@ impl NeedsWhitespaceStringExt for str {
                     || x == '+'
                     || x == '"'
                     || x == '\''
+                    || x == '('
             })
             .unwrap_or_default()
     }
@@ -54,6 +55,7 @@ impl NeedsWhitespaceStringExt for str {
                     || x == '_'
                     || x == '%'
                     || x == '+'
+                    || x == ')'
             })
             .unwrap_or_default()
     }
