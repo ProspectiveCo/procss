@@ -1576,7 +1576,7 @@ dependencies = [
 
 [[package]]
 name = "procss"
-version = "0.1.16"
+version = "0.1.17"
 dependencies = [
  "anyhow",
  "base64 0.13.1",
@@ -1592,7 +1592,7 @@ dependencies = [
 
 [[package]]
 name = "procss-utils"
-version = "0.1.16"
+version = "0.1.17"
 dependencies = [
  "once_cell",
  "regex",
@@ -1600,7 +1600,7 @@ dependencies = [
 
 [[package]]
 name = "procss-xbuild"
-version = "0.1.16"
+version = "0.1.17"
 dependencies = [
  "once_cell",
  "procss-utils",
@@ -1611,7 +1611,7 @@ dependencies = [
 
 [[package]]
 name = "procss-xtest"
-version = "0.1.16"
+version = "0.1.17"
 dependencies = [
  "grcov",
  "once_cell",
