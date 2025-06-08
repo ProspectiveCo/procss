@@ -16,9 +16,7 @@ pub fn remove_var(css: &mut Css) {
     let reduced = css
         .iter()
         .filter(|&ruleset| match ruleset {
-            Ruleset::QualRule(QualRule(name, Some(val))) if val.strip_prefix(':').is_some() => {
-                false
-            }
+            Ruleset::QualRule(QualRule(_, Some(val))) if val.strip_prefix(':').is_some() => false,
             _ => true,
         })
         .cloned();

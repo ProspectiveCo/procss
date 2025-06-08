@@ -131,7 +131,7 @@ fn test_font_face() {
         .map(|x| x.flatten_tree().as_css_string())
         .as_deref(),
         Ok("@font-face{font-family:\"Open \
-            Sans\";font-display:block;src:url(./font/open-sans.woff2)format(\"truetype\");}")
+            Sans\";font-display:block;src:url(./font/open-sans.woff2) format(\"truetype\");}")
     )
 }
 
@@ -149,7 +149,7 @@ fn test_media() {
         )
         .map(|x| x.flatten_tree().as_css_string())
         .as_deref(),
-        Ok("@media(max-width:1250px){div{color:red;}}")
+        Ok("@media (max-width:1250px){div{color:red;}}")
     )
 }
 
@@ -174,7 +174,7 @@ fn test_nested_media_preserved_after_flatten() {
         .map(|x| x.flatten_tree().as_css_string())
         .as_deref(),
         Ok(
-            "@media(max-width:1250px){@media(min-width:50px){div{color:red;}div \
+            "@media (max-width:1250px){@media (min-width:50px){div{color:red;}div \
              span{color:blue;}}}"
         )
     )

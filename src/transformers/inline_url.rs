@@ -17,6 +17,7 @@ use nom::bytes::complete::{is_not, tag};
 use nom::sequence::delimited;
 
 use crate::ast::{Css, Rule};
+#[cfg(not(target_arch = "wasm32"))]
 use crate::utils::fs;
 #[cfg(feature = "iotest")]
 use crate::utils::IoTestFs;
@@ -57,7 +58,7 @@ fn into_data_uri<'a>(path: &Path) -> Option<Cow<'a, str>> {
         "png" => "png",
         "gif" => "gif",
         "svg" => "svg+xml",
-        x => ggg.as_ref(),
+        _ => ggg.as_ref(),
     };
 
     Some(format!("url(\"data:image/{};base64,{}\")", fmt, encoded).into())

@@ -45,3 +45,13 @@ fn test_minify_svg() {
         Ok("div{background:url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' preserveAspectRatio='none' viewBox='0 0 100 100'><path d='M100 0 L0 100 ' stroke='black' stroke-width='1'/><path d='M0 0 L100 100 ' stroke='black' stroke-width='1'/></svg>\")#8b868045;}")
     )
 }
+
+#[test]
+fn test_minify_complex_calc() {
+    assert_matches!(
+        parse(r#"div { padding: calc(17px + ((var(--status-bar--height) - 48px) / 2)); }"#)
+            .map(|x| x.as_css_string())
+            .as_deref(),
+        Ok("div{padding:calc(17px + ((var(--status-bar--height) - 48px)/2));}")
+    )
+}
