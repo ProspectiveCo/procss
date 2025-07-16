@@ -42,6 +42,30 @@ fn test_inline_url() {
 }
 
 #[test]
+fn test_single_quotes_inline_url() {
+    let ctx = procss::utils::fs::read_context();
+    ctx.expect()
+        .returning(|_| Ok("abcde".as_bytes().to_owned()));
+
+    assert_matches!(
+        parse(
+            "
+            div.open {
+                color: url(\'/test.svg\');
+            }
+        "
+        )
+        .map(|x| {
+            let mut css = x.flatten_tree();
+            inline_url("")(&mut css);
+            css.as_css_string()
+        })
+        .as_deref(),
+        Ok("div.open{color:url(\"data:image/svg+xml;base64,YWJjZGU=\");}")
+    )
+}
+
+#[test]
 fn test_omit_non_path_inline_url() {
     let ctx = procss::utils::fs::read_context();
     ctx.expect()

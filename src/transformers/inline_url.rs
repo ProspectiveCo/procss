@@ -41,8 +41,9 @@ fn read_file_sync(path: &Path) -> Option<Vec<u8>> {
 
 fn parse_url(input: &str) -> nom::IResult<&str, &str> {
     let unquoted = delimited(tag("url("), is_not(")"), tag(")"));
-    let quoted = delimited(tag("url(\""), is_not("\""), tag("\")"));
-    alt((quoted, unquoted))(input)
+    let dblquoted = delimited(tag("url(\""), is_not("\""), tag("\")"));
+    let sglquoted = delimited(tag("url('"), is_not("'"), tag("')"));
+    alt((sglquoted, dblquoted, unquoted))(input)
 }
 
 fn into_data_uri<'a>(path: &Path) -> Option<Cow<'a, str>> {
