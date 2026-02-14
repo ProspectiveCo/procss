@@ -1,6 +1,6 @@
 [package]
 name = "procss"
-version = "0.1.17"
+version = "0.1.18"
 edition = "2021"
 authors = ["Andrew Stein <andrew@prospective.dev>"]
 description = "A simple CSS parsing and transformation framework."
@@ -34,7 +34,7 @@ criterion = { version = "0.4", features = ["html_reports"] }
 [dependencies]
 nom = "7"
 anyhow = "1"
-base64 = "0"
+base64 = ">=0.22.1"
 mockall = "0"
 
 [workspace.dependencies]
