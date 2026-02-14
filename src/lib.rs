@@ -78,7 +78,6 @@
 //! ```
 
 #![feature(assert_matches)]
-#![feature(path_file_prefix)]
 
 pub mod ast;
 mod builder;
