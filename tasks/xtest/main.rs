@@ -27,6 +27,8 @@ fn main() {
         cargo_cmd_args.push("--release");
     }
 
+    cargo_cmd_args.push("--");
+    cargo_cmd_args.push("--test-threads=1");
     cargo_cmd.args(cargo_cmd_args);
     if *IS_COVERAGE {
         std::fs::remove_dir_all("target/prof").unwrap_or_default();

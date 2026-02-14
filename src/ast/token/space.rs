@@ -113,7 +113,7 @@ where
 }
 
 /// Parses 1 or more whitespace characters, including comments.
-pub fn comment1<'a, E>(input: &'a str) -> IResult<&'_ str, (), E>
+pub fn comment1<'a, E>(input: &'a str) -> IResult<&'a str, (), E>
 where
     E: ParseError<&'a str>,
 {
@@ -125,7 +125,7 @@ where
 }
 
 /// Parses 0 or more whitespace characters, including comments and semicolons.
-pub fn sep0<'a, E>(input: &'a str) -> IResult<&'_ str, (), E>
+pub fn sep0<'a, E>(input: &'a str) -> IResult<&'a str, (), E>
 where
     E: ParseError<&'a str>,
 {

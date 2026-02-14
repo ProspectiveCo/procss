@@ -12,6 +12,7 @@
 use std::borrow::Cow;
 use std::path::Path;
 
+use base64::prelude::*;
 use nom::branch::alt;
 use nom::bytes::complete::{is_not, tag};
 use nom::sequence::delimited;
@@ -52,7 +53,7 @@ fn into_data_uri<'a>(path: &Path) -> Option<Cow<'a, str>> {
     }
 
     let contents = read_file_sync(path)?;
-    let encoded = base64::encode(contents);
+    let encoded = BASE64_STANDARD.encode(contents);
     let fff = path.extension().unwrap_or_default().to_string_lossy();
     let ggg = path.to_string_lossy();
     let fmt = match fff.as_ref() {

@@ -32,24 +32,24 @@ iotest = []
 criterion = { version = "0.4", features = ["html_reports"] }
 
 [dependencies]
-nom = "7.1.1"
-anyhow = "1.0.56"
-base64 = "0.13.1"
-mockall = "0.11.3"
+nom = "7"
+anyhow = "1"
+base64 = "0"
+mockall = "0"
 
 [workspace.dependencies]
 grcov = { version = "0.8.13", artifact = "bin" }
-once_cell = "1.17.0"
-regex = "1.7.0"
-wasm-bindgen-cli = { version = "0.2.83", artifact = "bin" }
-wasm-opt = "0.111.0"
+once_cell = "1.21.3"
+regex = "1.12.3"
+wasm-bindgen-cli = { version = "0.2.108", artifact = "bin" }
+wasm-opt = "0.116.1"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 console_error_panic_hook = "0.1.7"
-js-sys = "0.3.60"
-serde-wasm-bindgen = "0.4.5"
-wasm-bindgen = { version = "0.2.83", features = ["serde-serialize"] }
-web-sys = { version = "0.3.60", features = ["console"] }
+js-sys = "0.3.85"
+serde-wasm-bindgen = "0.6.5"
+wasm-bindgen = { version = "0.2.108", features = ["serde-serialize"] }
+web-sys = { version = "0.3.85", features = ["console"] }
 
 [profile.release]
 lto = true
